@@ -10,6 +10,7 @@ DEPENDENCIES=(
   "node"
   "npm"
 )
+SCRIPTDIR=$(dirname $0)
 
 # TODO: create a function or script out of this 
 unameOut="$(uname -s)"
@@ -46,11 +47,11 @@ fi
 # checks for each dependency by checking its version 
 for DEP in "${DEPENDENCIES[@]}"; do
   echo -e "checking for $DEP..."
-  echo -e "$(bash ./utils/check_dep.sh $DEP)\n"
+  echo -e "$(bash $SCRIPTDIR/utils/check_dep.sh $DEP)\n"
 done
 
 echo -e "checking docker-compose version for compatibility..."
-echo -e "$(bash ./utils/check_version.sh docker-compose 1.18.0)\n"
+echo -e "$(bash $SCRIPTDIR/utils/check_version.sh docker-compose 1.18.0)\n"
 
 # TODO: create working checks for mac 
 if [[ $(systemctl is-active docker) == "inactive" ]]
@@ -114,14 +115,29 @@ echo -e "installing dependencies via npm...\n"
 
 for install_dir in "${NPM_INSTALLS[@]}"; do
   echo $install_dir
-  echo $(bash ./utils/npm_installs.sh $install_dir)
+  echo $(bash $SCRIPTDIR/utils/npm_installs.sh $install_dir)
   echo ""
 done 
 
 echo -e "starting TSQ...\n"
-echo $(bash ./utils/dc_up.sh $TSQ_DIR)
+echo $(bash $SCRIPTDIR/utils/dc_up.sh $TSQ_DIR)
 
 echo -e "starting aarc..."
-echo $(bash ./utils/dc_build_up.sh "$AARC_DIR/docker/aarc_dev/")
+echo $(bash $SCRIPTDIR/utils/dc_build_up.sh "$AARC_DIR/docker/aarc_dev/")
 echo -e "starting padawan..."
-echo $(bash ./utils/dc_build_up.sh "$PADAWAN_DIR/docker/dev/")
+echo $(bash $SCRIPTDIR/utils/dc_build_up.sh "$PADAWAN_DIR/docker/dev/")
+
+echo -e "installing meteor and starting padawan.... \n\n"
+
+printf "starting up application container, this may take awhile..."
+while [ $(docker logs dev_app_1 2>&1 | grep "App running at: http://localhost" -c -i) -lt 1 ];
+do 
+  printf "."
+  sleep 5s
+done 
+
+echo -e "\n"
+echo "application container started! navigate to http://localhost:3000"
+
+# echo $(cd "$PADAWAN_DIR/docker/dev/" && docker-compose build)
+# echo $(cd "$PADAWAN_DIR/docker/dev/" && docker-compose up)
