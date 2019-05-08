@@ -109,7 +109,6 @@ fi
 echo ""
 
 NPM_INSTALLS=( "$WORKDIR/aarc/frontend" "$WORKDIR/aarc/api"  "$WORKDIR/TSQ-Microservice")
-DC_BUILD=("$AARC_DIR/docker/aarc_dev" "$PADAWAN_DIR/docker/dev")
 
 echo -e "installing dependencies via npm...\n"
 
@@ -122,9 +121,7 @@ done
 echo -e "starting TSQ...\n"
 echo $(bash ./utils/dc_up.sh $TSQ_DIR)
 
-for build in "${DC_BUILD[@]}"; do
-  echo "building $build"
-  echo $(bash ./utils/dc_build_up.sh $build)
-  echo ""
-done 
-
+echo -e "starting aarc..."
+echo $(bash ./utils/dc_build_up.sh "$AARC_DIR/docker/aarc_dev/")
+echo -e "starting padawan..."
+echo $(bash ./utils/dc_build_up.sh "$PADAWAN_DIR/docker/dev/")
