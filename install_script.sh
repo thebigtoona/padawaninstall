@@ -108,9 +108,9 @@ fi
 # check for install directory specification 
 if [ -z "$1" ]
 then 
-  echo "You did not set an installtion directory.  Please type an install directory..."
-  read input
-  installDirectory=input
+  echo "You did not set an installtion directory"
+  read -p "Please set a location or use the default provided: " -ei "$HOME/developerlevel" installDirectory
+  echo "install directory: $installDirectory"
 fi 
 
 # if there is no directory, make one 
