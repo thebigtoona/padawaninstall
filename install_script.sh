@@ -76,6 +76,11 @@ npmInstall () {
   return 
 }
 
+meteorReset () {
+  local dir=$1
+  cd $dir && meteor reset
+}
+
 # install dir 
 installDirectory=$1
 
@@ -103,9 +108,9 @@ fi
 # check for install directory specification 
 if [ -z "$1" ]
 then 
-  echo "You did not set an installtion directory.  Please type an install directory..."
-  read input
-  installDirectory=input
+  echo "You did not set an installtion directory"
+  read -p "Please set a location or use the default provided: " -ei "$HOME/developerlevel" installDirectory
+  echo "install directory: $installDirectory"
 fi 
 
 # if there is no directory, make one 
@@ -204,9 +209,13 @@ then
   echo -e "installing padawan npm dependencies...\n"
 
   meteor npm install --prefix "$installDirectory/padawan/"
+  
   PADAWAN_DIR="$installDirectory/padawan"
   
+  meteorReset $PADAWAN_DIR
+  
   echo ""
+
 else
   echo "padawan is not in the specified work directory.  cloning into $installDirectory..."
   
@@ -216,8 +225,11 @@ else
   echo -e "installing padawan npm dependencies...\n"
 
   meteor npm install --prefix "$installDirectory/padawan/"
-  PADAWAN_DIR="$installDirectory/padawan"
 
+  PADAWAN_DIR="$installDirectory/padawan"
+  
+  meteorReset $PADAWAN_DIR
+  
   echo ""
 fi 
 
