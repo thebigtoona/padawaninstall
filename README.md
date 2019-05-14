@@ -1,5 +1,9 @@
 # Install Helper for Padawan 
 
+![GitHub release](https://img.shields.io/github/release-pre/thebigtoona/padawaninstall.svg)
+![GitHub issues](https://img.shields.io/github/issues/thebigtoona/padawaninstall.svg)
+![Supported Platforms](https://img.shields.io/badge/platforms-Linux%20%7C%20OSX-9cf.svg)
+
 ## Things to Note
 
 * This script is cross compatible for Mac and Linux, however due to current issues with 
